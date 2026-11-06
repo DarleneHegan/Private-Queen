@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Naizka</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E<text y=%2226%22 font-size=%2228%22>💌</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sacramento&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50: '#fffdfa', 100: '#fdfbf7', 200: '#f9f3ea', 300: '#f2e5d3', 400: '#e5ceb3' },
+            crimson: { 50: '#fff1f2', 100: '#ffe4e6', 500: '#f43f5e', 600: '#e11d48', 700: '#be123c', 800: '#9f1239', 900: '#881337' },
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Newsreader"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            handwriting: ['"Caveat"', 'cursive'],
+            script: ['"Sacramento"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Canvas Confetti & Custom Stylesheet -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="css/style.css?v=5">
+
+  <style>
+    /* Amplop melayang pelan sebelum dibuka */
+    .envelope-idle { animation: envFloat 4.5s ease-in-out infinite; }
+    @keyframes envFloat {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-9px); }
+    }
+    /* Segel merah tidak hilang saat amplop dibuka: digeser ke kanan sementara,
+       lalu kembali menjepit di tengah setelah amplop tertutup lagi */
+    .wax-seal {
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    }
+    .wax-seal.broken {
+      transform: translate(calc(-50% + 128px), -50%) rotate(24deg);
+      opacity: 1;
+      pointer-events: none;
+    }
+    @media (min-width: 640px) {
+      .wax-seal.broken {
+        transform: translate(calc(-50% + 190px), -50%) rotate(24deg);
+      }
+    }
+
+    /* Bagian dalam/belakang amplop (terlihat lewat takik V saat penutup terbuka) */
+    .envelope-back {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: 0 0 16px 16px;
+      border: 2px solid #dfc7ab;
+      background: linear-gradient(180deg, #d4b995, #e6d2b6);
+      box-shadow: 0 20px 35px -10px rgba(136, 19, 55, 0.15);
+    }
+    .envelope-idle .envelope-back {
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 0 70px rgba(244, 63, 94, 0.28);
+    }
+
+    /* Muka depan amplop diberi takik V (sama persis dengan bentuk penutup),
+       sehingga saat penutup terbuka kertas di dalamnya terlihat */
+    .envelope-container .envelope-pocket {
+      box-shadow: none;
+      clip-path: polygon(0 0, 0.5% 0, 50% 48.5%, 99.5% 0, 100% 0, 100% 100%, 0 100%);
+    }
+    @media (min-width: 640px) {
+      .envelope-container .envelope-pocket {
+        clip-path: polygon(0 0, 0.5% 0, 50% 50.3%, 99.5% 0, 100% 0, 100% 100%, 0 100%);
+      }
+    }
+    .envelope-container { cursor: pointer; }
+    .envelope-container.is-open { cursor: default; }
+
+    /* Segel berdenyut halus */
+    .envelope-idle .wax-seal { animation: sealGlow 2.6s ease-in-out infinite; }
+    @keyframes sealGlow {
+      0%, 100% { box-shadow: 0 4px 14px rgba(136, 19, 55, 0.45), 0 0 0 0 rgba(251, 113, 133, 0.5), inset 0 2px 4px rgba(255,255,255,0.35), inset 0 -3px 6px rgba(0,0,0,0.45); }
+      50%      { box-shadow: 0 4px 14px rgba(136, 19, 55, 0.45), 0 0 0 14px rgba(251, 113, 133, 0), inset 0 2px 4px rgba(255,255,255,0.35), inset 0 -3px 6px rgba(0,0,0,0.45); }
+    }
+
+    /* Label "Untuk: Naizka" di muka amplop */
+    .envelope-label {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 16px;
+      text-align: center;
+      z-index: 12;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+    @media (min-width: 640px) { .envelope-label { bottom: 26px; } }
+
+    /* Petunjuk klik yang samar */
+    .tap-hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(255, 228, 230, 0.4);
+      animation: hintBreath 3.4s ease-in-out infinite;
+      transition: opacity 0.5s ease;
+    }
+    @keyframes hintBreath {
+      0%, 100% { opacity: 0.25; }
+      50%      { opacity: 0.65; }
+    }
+
+    .fade-away { opacity: 0 !important; pointer-events: none; }
+
+    /* Kucing yang menyerahkan surat, menempel di sudut kanan-bawah amplop */
+    .cat-buddy {
+      position: absolute;
+      right: -18px;
+      bottom: -38px;
+      width: 156px;
+      z-index: 30; /* di atas amplop, tapi di bawah surat (z 35) sehingga tertimpa surat saat terbuka */
+      transform: rotate(-4deg);
+      transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    @media (min-width: 640px) {
+      .cat-buddy { right: -62px; bottom: -48px; width: 230px; }
+    }
+
+    /* Penutup amplop yang terbuka: bagian dalamnya terlihat (segitiga mengarah ke atas) */
+    .envelope-flap {
+      backface-visibility: visible;
+      /* z-index baru berpindah saat penutup tegak (sekitar 90°), jadi kertas di dalam
+         tetap tertimpa penutup di awal gerakan dan terbuka perlahan, bukan muncul tiba-tiba */
+      transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s linear 0.42s;
+    }
+    /* Warna bagian dalam penutup baru tampil setelah melewati 90° */
+    .envelope-flap.opened {
+      animation: flapInner 0.001s linear 0.42s forwards;
+    }
+    @keyframes flapInner {
+      to {
+        background: linear-gradient(180deg, #d9bf9f, #ead8bf);
+        box-shadow: inset 0 -6px 12px rgba(136, 19, 55, 0.12), 0 -6px 14px rgba(0, 0, 0, 0.18);
+      }
+    }
+    /* Saat menutup kembali: tetap berwarna bagian dalam sampai melewati 90°, lalu kembali ke depan */
+    .envelope-flap.unfolding {
+      background: linear-gradient(180deg, #d9bf9f, #ead8bf);
+      animation: flapFront 0.001s linear 0.42s forwards;
+    }
+    @keyframes flapFront {
+      to {
+        background: linear-gradient(180deg, #eddcc6, #e4cdb1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+    }
+
+    /* Tinggi surat dibuat eksplisit agar bisa beranimasi saat terbentang */
+    .letter-sheet { bottom: auto; height: 190px; }
+    @media (min-width: 640px) {
+      .letter-sheet { height: 240px; }
+    }
+
+    /* Surat mengintip (setengah terlihat) lalu naik sepenuhnya, tetap di belakang bibir amplop */
+    .letter-sheet.peek,
+    .letter-sheet.rising {
+      transition: transform 0.8s cubic-bezier(0.3, 0.7, 0.3, 1), height 0.8s ease;
+      z-index: 8;
+    }
+    .letter-sheet.peek { transform: translateY(-70px); }
+    .letter-sheet.rising { transform: translateY(-215px); }
+    @media (min-width: 640px) {
+      .letter-sheet.peek { transform: translateY(-90px); }
+      .letter-sheet.rising { transform: translateY(-270px); }
+    }
+
+    /* Tinggi kertas dihitung dari isi penuh surat (diukur lewat JS), jadi tidak berubah saat mengetik */
+    .letter-sheet.slide-up { height: var(--letter-h, 380px); }
+
+    /* Stempel menempel pada kertas: diposisikan terhadap isi surat, bukan tepi kertas */
+    #letterContent .rubber-stamp { bottom: 8px; right: 4px; }
+    @media (min-width: 640px) {
+      #letterContent .rubber-stamp { bottom: 12px; right: 8px; }
+    }
+    .cat-buddy.cat-away {
+      opacity: 0;
+      transform: translateX(40px) rotate(6deg);
+    }
+
+    /* Masuk halus */
+    .intro-rise { animation: introRise 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+    @keyframes introRise {
+      0%   { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body data-step="1" class="intro-scene antialiased min-h-screen selection:bg-crimson-100 selection:text-crimson-800 relative flex flex-col justify-between overflow-x-hidden">
+
+  <!-- Suasana: bintang kecil & kelopak jatuh -->
+  <div id="ambient" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Main Content -->
+  <main class="relative z-10 max-w-3xl mx-auto px-4 py-8 md:py-12 flex-grow flex flex-col justify-center items-center">
+
+    <!-- 3D Realistic Envelope -->
+    <div class="envelope-perspective w-full intro-rise" style="animation-delay: 0.25s;">
+      <div class="envelope-container envelope-idle" id="envelopeWrapper" onclick="executeEnvelopeSequence()">
+
+        <!-- Bagian dalam amplop -->
+        <div class="envelope-back"></div>
+
+        <!-- Flap -->
+        <div class="envelope-flap" id="envelopeFlap"></div>
+
+        <!-- Wax Seal -->
+        <div class="wax-seal" id="waxSeal" title="Buka surat">
+          <div class="text-center select-none">
+            
+          </div>
+        </div>
+
+        <!-- Label tujuan -->
+        <div class="envelope-label" id="envelopeLabel">
+          <div class="font-mono text-[10px] sm:text-[11px] tracking-[0.35em] uppercase text-crimson-800/60">Untuk</div>
+          <div data-recipient-name class="font-handwriting text-4xl sm:text-5xl font-bold text-crimson-800 leading-none mt-0.5">Naizka</div>
+        </div>
+
+        <!-- Letter Sheet -->
+        <div class="letter-sheet" id="letterSheet">
+         <!-- Isi surat dibungkus agar stempel menempel pada kertas (tidak ikut bergeser saat surat mengecil) -->
+         <div id="letterContent" class="relative">
+
+          <div class="text-center pb-2 mb-2 border-b-2 border-amber-300/70">
+            <!-- Mahkota kecil sebagai kop kerajaan -->
+            <svg viewBox="0 0 64 50" class="w-6 h-5 mx-auto mb-1" aria-hidden="true">
+              <path d="M6 40 L2 12 L18 25 L32 6 L46 25 L62 12 L58 40 Z" fill="#f5c542" stroke="#a16207" stroke-width="3" stroke-linejoin="round"/>
+              <rect x="6" y="40" width="52" height="7" rx="2" fill="#e0a82e" stroke="#a16207" stroke-width="3"/>
+              <circle cx="32" cy="6" r="4.5" fill="#e11d48"/>
+              <circle cx="2" cy="12" r="3.5" fill="#fb7185"/>
+              <circle cx="62" cy="12" r="3.5" fill="#fb7185"/>
+            </svg>
+            <div class="font-serif font-bold text-xs sm:text-sm tracking-wider uppercase text-slate-900">
+              ISTANA KERAJAAN PERIZINAN KENCAN
+            </div>
+            <div class="text-[10px] sm:text-xs font-mono text-amber-700">
+              KERAJAAN HATI • TITAH RESMI SANG PANGERAN
+            </div>
+          </div>
+
+          <div class="font-serif text-slate-800 text-xs sm:text-sm text-justify space-y-2 relative">
+            <div class="font-mono text-[11px] text-crimson-800 font-bold">
+              Perihal: Titah Kerajaan Undangan Kencan Akhir Pekan
+            </div>
+
+            <!-- Ruang tulisan dipesan penuh sejak awal (tak terlihat) supaya kertas tidak membesar saat mengetik -->
+            <div class="relative">
+              <div id="typewriterSizer" class="leading-relaxed invisible" aria-hidden="true"></div>
+              <div class="absolute inset-0 leading-relaxed">
+                <span id="typewriterTarget"></span><span id="typewriterCaret" class="caret-blink"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-2 border-t border-dashed border-slate-200 flex justify-between items-end text-[10px] sm:text-xs">
+            <div>
+              <span class="text-slate-400 font-mono block">Diverifikasi Oleh:</span>
+              <span class="font-script text-xl sm:text-2xl text-slate-800 font-bold block -mt-1">Restu Semesta & Ortu</span>
+            </div>
+            <div class="text-right">
+              <span class="text-slate-400 font-mono block">Status Dokumen:</span>
+              <span class="font-mono text-emerald-700 font-bold">MUTLAK & SAH</span>
+            </div>
+          </div>
+
+          <div id="rubberStamp" class="rubber-stamp hidden font-mono">
+            <div class="flex items-center gap-1 justify-center">
+              <span>✓</span>
+              <span>RESMI DI-ACC ORTU!</span>
+            </div>
+            <div class="text-[9px] tracking-normal font-sans text-center mt-0.5">
+              NO DEBAT • VALIDASI 100%
+            </div>
+          </div>
+
+         </div>
+        </div>
+
+        <!-- Pocket Envelope Base -->
+        <div class="envelope-pocket"></div>
+
+        <!-- Kucing pembawa surat & bunga: berdiri di sudut kanan-bawah amplop -->
+        <div id="catBuddy" class="cat-buddy">
+          <picture class="block w-full animate-float">
+            <source srcset="Addons/cat-flower.webp" type="image/webp">
+            <img src="Addons/cat-flower.png" alt="" class="w-full h-auto drop-shadow-lg select-none pointer-events-none">
+          </picture>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Petunjuk samar & tombol lanjut -->
+    <div class="mt-6 text-center min-h-[60px] flex flex-col items-center justify-center gap-3">
+      <div id="tapHint" class="tap-hint">Pencet suratnya dong...</div>
+
+      <div id="readHint" class="hidden font-handwriting text-xl sm:text-2xl text-rose-100/90 leading-none">Udah baca belum nihh?</div>
+
+      <button
+        id="btnNextToRundown"
+        onclick="closeLetterAndContinue()"
+        class="hidden px-8 py-3.5 bg-gradient-to-r from-crimson-700 via-rose-700 to-crimson-800 hover:from-crimson-800 hover:to-rose-800 text-white font-sans font-bold text-base rounded-full shadow-xl hover:shadow-crimson-700/30 transition-all duration-300 active:scale-95 animate-pulseSlow items-center gap-2.5 cursor-pointer">
+        <span>Udah nichhh..</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Footer
+  <footer class="py-4 text-center text-xs font-mono text-rose-100/30 relative z-10">
+    Republik Bucin Indonesia 🇮🇩
+  </footer> -->
+
+  <!-- Scripts -->
+  <script src="js/audio.js?v=4"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ambient.js?v=3"></script>
+  <script>
+    let waxBroken = false;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.scrollTo(0, 0);
+    });
+
+    // Dijalankan hanya setelah user mengklik amplop
+    function executeEnvelopeSequence() {
+      if (waxBroken) return;
+      waxBroken = true;
+      lockScroll();
+
+      const wrapper = document.getElementById('envelopeWrapper');
+      const waxSeal = document.getElementById('waxSeal');
+      const envelopeFlap = document.getElementById('envelopeFlap');
+      const letterSheet = document.getElementById('letterSheet');
+
+      prepareLetterSize(letterSheet);
+
+      wrapper.classList.remove('envelope-idle');
+      wrapper.classList.add('is-open');
+      document.getElementById('tapHint').classList.add('fade-away');
+
+      // 1. Pecahkan segel lilin
+      SoundEffects.play('whoosh');
+      waxSeal.classList.add('broken');
+
+      // 2. Buka lipatan amplop
+      setTimeout(() => {
+        envelopeFlap.classList.add('opened');
+      }, 350);
+
+      // 3. Penutup terbuka: kertas terlihat di dalam amplop lewat takik V (jeda sebentar)
+      // 4. Kertas ditarik keluar sepenuhnya, masih di belakang muka depan amplop
+      setTimeout(() => {
+        letterSheet.classList.add('rising');
+        SoundEffects.play('whoosh');
+      }, 1900);
+
+      // 5. Kertas sudah di atas amplop, lalu terbentang ke ukuran penuh
+      setTimeout(() => {
+        letterSheet.classList.remove('rising');
+        letterSheet.classList.add('slide-up');
+      }, 2800);
+
+      // 6. Surat zoom in hingga hampir memenuhi layar (masih ada sisa di tepi)
+      setTimeout(() => {
+        applyLetterZoom(letterSheet);
+        letterSheet.classList.add('zoomed');
+      }, 3800);
+
+      // 7. Mulai ketikan mesin tik
+      setTimeout(() => {
+        startLetterTypewriter();
+      }, 4750);
+    }
+
+    function getLetterText() {
+      return `Berdasarkan hasil musyawarah dan pemantauan tingkat kegemasan yang sudah melewati batas wajar, saudari ${AppState.recipientName} resmi diundang untuk agenda first date. Diberikan garansi 100% makanan enak, pengalaman kencan yang memuaskan, serta pengawalan penuh oleh Sang Pangeran dari awal berangkat sampai pulang ke rumah.`;
+    }
+
+    // Isi ruang tulisan dengan teks penuh (tak terlihat), lalu ukur tinggi kertas
+    // yang pas untuk seluruh isi supaya kertas tidak membesar saat mengetik.
+    function prepareLetterSize(letterSheet) {
+      document.getElementById('typewriterSizer').textContent = getLetterText();
+      const content = document.getElementById('letterContent');
+      const cs = getComputedStyle(letterSheet);
+      const extra = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+                  + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
+      const needed = Math.ceil(content.offsetHeight + extra) + 6;
+      letterSheet.style.setProperty('--letter-h', needed + 'px');
+    }
+
+    // Hitung skala & posisi supaya surat besar tapi tetap di dalam layar,
+    // dan tidak menutupi area tombol di bawahnya.
+    function applyLetterZoom(letterSheet) {
+      const r = letterSheet.getBoundingClientRect();
+      const buttonAreaTop = document.getElementById('tapHint').parentElement.getBoundingClientRect().top;
+
+      const availTop = 14;
+      const availBottom = Math.max(buttonAreaTop - 6, availTop + 200);
+      const availH = availBottom - availTop;
+
+      const maxScale = window.innerWidth >= 640 ? 1.2 : 1.7;
+      const scale = Math.max(1.05, Math.min((window.innerWidth * 0.92) / r.width, availH / r.height, maxScale));
+
+      // Tengahkan surat pada area yang tersedia
+      const dy = (availTop + availBottom) / 2 - (r.top + r.height / 2);
+
+      letterSheet.style.setProperty('--zoom', scale.toFixed(3));
+      letterSheet.style.setProperty('--zoom-dy', dy.toFixed(1) + 'px');
+    }
+
+    function startLetterTypewriter() {
+      const typewriterTarget = document.getElementById('typewriterTarget');
+      const typewriterCaret = document.getElementById('typewriterCaret');
+
+      const letterParagraph = getLetterText();
+
+      let charIndex = 0;
+      typewriterTarget.textContent = "";
+
+      function typeNextChar() {
+        if (charIndex < letterParagraph.length) {
+          typewriterTarget.textContent += letterParagraph.charAt(charIndex);
+          charIndex++;
+          if (charIndex % 3 === 0) {
+            SoundEffects.play('typewriter');
+          }
+          setTimeout(typeNextChar, 18);
+        } else {
+          typewriterCaret.style.display = 'none';
+          triggerRubberStampApproval();
+        }
+      }
+
+      typeNextChar();
+    }
+
+    // Klik "Lanjut": surat mengecil, masuk lagi ke amplop, amplop menutup, lalu ke rundown
+    let isClosingLetter = false;
+    function closeLetterAndContinue() {
+      if (isClosingLetter) return;
+      isClosingLetter = true;
+
+      const letterSheet = document.getElementById('letterSheet');
+      const envelopeFlap = document.getElementById('envelopeFlap');
+      const waxSeal = document.getElementById('waxSeal');
+      const label = document.getElementById('envelopeLabel');
+      const btn = document.getElementById('btnNextToRundown');
+
+      SoundEffects.play('click');
+      btn.classList.add('fade-away');
+      document.getElementById('readHint').classList.add('fade-away');
+
+      // 1. Surat mengecil & turun ke posisi tepat di atas amplop
+      letterSheet.classList.remove('zoomed', 'slide-up');
+      letterSheet.classList.add('returning');
+      SoundEffects.play('whoosh');
+
+      // 2. Surat meluncur masuk ke dalam amplop
+      setTimeout(() => {
+        letterSheet.classList.remove('returning');
+        letterSheet.classList.add('inside');
+        SoundEffects.play('whoosh');
+      }, 1000);
+
+      // 3. Penutup amplop menutup, segel dan nama muncul lagi
+      setTimeout(() => {
+        envelopeFlap.classList.add('unfolding');
+        envelopeFlap.classList.remove('opened');
+        SoundEffects.play('whoosh');
+      }, 2000);
+
+      setTimeout(() => {
+        waxSeal.classList.remove('broken');
+        label.classList.remove('fade-away');
+        SoundEffects.play('stamp');
+      }, 2900);
+
+      // 4. Pindah ke halaman rundown
+      setTimeout(() => {
+        navigateTo('rundown.html');
+      }, 3700);
+    }
+
+    function triggerRubberStampApproval() {
+      const rubberStamp = document.getElementById('rubberStamp');
+      const envelopeWrapper = document.getElementById('envelopeWrapper');
+      const btnNextToRundown = document.getElementById('btnNextToRundown');
+
+      setTimeout(() => {
+        rubberStamp.classList.remove('hidden');
+        rubberStamp.classList.add('animate-stampSlam');
+        SoundEffects.play('stamp');
+
+        envelopeWrapper.classList.add('animate-shake');
+
+        if (window.confetti) {
+          confetti({
+            particleCount: 45,
+            spread: 60,
+            origin: { y: 0.65 },
+            colors: ['#be123c', '#fb7185', '#fbbf24', '#ffffff']
+          });
+        }
+
+        setTimeout(() => {
+          if (btnNextToRundown) {
+            btnNextToRundown.classList.remove('hidden');
+            btnNextToRundown.classList.add('flex');
+            const readHint = document.getElementById('readHint');
+            readHint.classList.remove('hidden');
+            readHint.classList.add('intro-rise');
+          }
+        }, 500);
+      }, 350);
+    }  </script>
+</body>
+</html>

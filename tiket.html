@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tiket Kencan Resmi 🎫 | Tiket VIP</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E<text y=%2226%22 font-size=%2228%22>💌</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sacramento&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50: '#fffdfa', 100: '#fdfbf7', 200: '#f9f3ea', 300: '#f2e5d3', 400: '#e5ceb3' },
+            crimson: { 50: '#fff1f2', 100: '#ffe4e6', 500: '#f43f5e', 600: '#e11d48', 700: '#be123c', 800: '#9f1239', 900: '#881337' },
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Newsreader"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            handwriting: ['"Caveat"', 'cursive'],
+            script: ['"Sacramento"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Canvas Confetti & HTML2Canvas & Custom Stylesheet -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="css/style.css?v=3">
+</head>
+
+<body data-step="4"
+  class="intro-scene antialiased min-h-screen selection:bg-crimson-100 selection:text-crimson-800 relative flex flex-col justify-between py-6 overflow-x-hidden">
+
+  <!-- Suasana latar -->
+  <div id="ambient" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Main Content: VIP TICKET -->
+  <main class="relative z-10 max-w-xl mx-auto px-4 flex-grow flex flex-col items-center justify-center">
+
+    <div class="w-full my-auto">
+
+      <!-- Wrapper Tiket & Kucing Happy Happy (di luar kotak) -->
+      <div class="relative w-full">
+
+        <!-- Dua kucing duduk di atas tiket (di luar area capture/download) -->
+        <div class="relative z-0 flex items-end justify-center px-2 select-none pointer-events-none">
+          <picture class="block w-1/2 max-w-[190px] sm:max-w-[230px]">
+            <source srcset="Addons/happy-cat.webp" type="image/webp">
+            <img src="Addons/happy-cat.gif" alt="Happy Cat Kiri" class="w-full h-auto drop-shadow-xl">
+          </picture>
+          <picture class="block w-1/2 max-w-[190px] sm:max-w-[230px]">
+            <source srcset="Addons/happy-cat.webp" type="image/webp">
+            <img src="Addons/happy-cat.gif" alt="Happy Cat Kanan" class="w-full h-auto drop-shadow-xl scale-x-[-1]">
+          </picture>
+        </div>
+        <!-- Pengingat simpan tiket (di antara kucing dan tiket) -->
+        <p class="relative z-10 text-center font-handwriting text-2xl sm:text-3xl text-rose-100 leading-tight px-4 mt-1 mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
+          Jangan lupa untuk dowload dan simpan ticketnya yak
+        </p>
+
+        <!-- Ticket Container (Bisa di-capture / download) -->
+        <div id="captureArea"
+          class="bg-gradient-to-b from-white to-parchment-100 rounded-3xl p-6 sm:p-8 border-2 border-amber-300 shadow-2xl relative z-10 overflow-hidden transition-transform duration-300">
+
+        <!-- Golden Top Ribbon -->
+        <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-amber-400 via-rose-400 to-crimson-600">
+        </div>
+
+        <!-- Ticket Header -->
+        <div class="flex items-center justify-between pb-4 mb-4 border-b-2 border-dashed border-slate-300">
+          <div>
+            <div class="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">OFFICIAL VIP BOARDING
+              PASS</div>
+            <div class="font-serif font-black text-xl sm:text-2xl text-slate-900">DATE PASS PRIVILEGE ✈️</div>
+          </div>
+          <div class="text-right">
+            <span
+              class="inline-block h-7 px-3 leading-[26px] text-center whitespace-nowrap rounded-full text-[11px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+              ✓ 100% CONFIRMED
+            </span>
+          </div>
+        </div>
+
+        <!-- Ticket Body Details -->
+        <div class="space-y-4 font-sans">
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="text-[11px] leading-4 font-mono text-slate-400 uppercase block mb-1">Penumpang / VIP Guest</span>
+              <span id="ticketPassengerName" class="font-serif font-bold text-lg leading-7 text-crimson-800 break-words block">Naizka (Sang Ratu)</span>
+            </div>
+            <div>
+              <span class="text-[11px] leading-4 font-mono text-slate-400 uppercase block mb-1">Status Tiket</span>
+              <span class="font-mono font-bold text-sm leading-7 text-emerald-700 block">DITRAKTIR & NO DEBAT</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 pt-2 border-t border-slate-200">
+            <div>
+              <span class="text-[11px] leading-4 font-mono text-slate-400 uppercase block mb-1">Jadwal Keberangkatan</span>
+              <span class="font-mono text-sm leading-5 font-semibold text-slate-800 block">Minggu, 8 November 2026</span>
+              <span class="font-mono text-sm leading-5 font-semibold text-slate-800 block">14:00 WIB</span>
+            </div>
+            <div>
+              <span class="text-[11px] leading-4 font-mono text-slate-400 uppercase block mb-1">Nomor Kursi</span>
+              <span class="font-mono text-sm leading-5 font-semibold text-slate-800 block">VIP 01</span>
+              <span class="font-mono text-sm leading-5 font-semibold text-slate-800 block">(Samping Pangeran)</span>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-200">
+            <span class="text-[11px] leading-4 font-mono text-slate-400 uppercase block mb-1">Destinasi</span>
+            <span class="font-serif text-sm leading-5 font-bold text-slate-800 block">Makan Enak dan Jalan Jalan bersama Sang Ratu🌹</span>
+          </div>
+
+          <!-- Terms & Condition playful note -->
+          <div class="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-xs text-amber-900 space-y-1">
+            <div class="font-bold leading-5">
+              <i data-lucide="info" class="inline-block w-3.5 h-3.5 mr-1 align-[-2px]"></i><span>Syarat & Ketentuan Kencan:</span>
+            </div>
+            <p>1. Wajib senyum manis sepanjang waktu.</p>
+            <p>2. Dilarang mikirin kerjaan atau tugas kuliah.</p>
+            <p>3. Seluruh biaya makan & minum ditanggung oleh Sang Pangeran.</p>
+          </div>
+
+          <!-- Barcode Simulation -->
+          <div class="pt-4 border-t-2 border-dashed border-slate-300 flex flex-col items-center">
+            <div class="font-mono text-[9px] text-slate-400 tracking-widest mb-1">DATE-TICKET-SERIAL-2026</div>
+            <div class="h-10 w-full flex justify-center items-center gap-1 opacity-80">
+              <!-- Barcode bars -->
+              <div class="w-1 h-8 bg-slate-900"></div>
+              <div class="w-2 h-8 bg-slate-900"></div>
+              <div class="w-0.5 h-8 bg-slate-900"></div>
+              <div class="w-1.5 h-8 bg-slate-900"></div>
+              <div class="w-1 h-8 bg-slate-900"></div>
+              <div class="w-3 h-8 bg-slate-900"></div>
+              <div class="w-1 h-8 bg-slate-900"></div>
+              <div class="w-0.5 h-8 bg-slate-900"></div>
+              <div class="w-2 h-8 bg-slate-900"></div>
+              <div class="w-1.5 h-8 bg-slate-900"></div>
+              <div class="w-1 h-8 bg-slate-900"></div>
+              <div class="w-2 h-8 bg-slate-900"></div>
+              <div class="w-0.5 h-8 bg-slate-900"></div>
+              <div class="w-3 h-8 bg-slate-900"></div>
+              <div class="w-1 h-8 bg-slate-900"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Pengingat konfirmasi WhatsApp (di bawah tiket) -->
+    <p class="text-center font-handwriting text-2xl sm:text-3xl text-rose-100 leading-tight px-4 mt-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
+      Konfirmasi juga ke whatsapp Sang Pangeran yak🤪
+    </p>
+
+    <!-- Tombol fallback jika browser memblokir autoplay musik -->
+    <div class="text-center mt-3">
+      <button id="btnPlayMusic" onclick="startHappyMusic(true)"
+        class="hidden items-center gap-2 mx-auto px-4 py-2 rounded-full bg-crimson-700 hover:bg-crimson-800 text-white text-xs font-bold shadow-md animate-pulseSlow">
+        <i data-lucide="music" class="w-4 h-4"></i>
+        <span>Tap untuk putar lagu Happy Happy Happy 🎵</span>
+      </button>
+    </div>
+
+    <!-- Action Buttons -->
+      <div class="mt-5 flex flex-col sm:flex-row items-center gap-3">
+        <!-- WhatsApp Send Button -->
+        <button onclick="sendWhatsAppConfirmation()"
+          class="w-full flex-1 py-3.5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-sans font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg hover:shadow-emerald-600/30 transition-all active:scale-95">
+          <i data-lucide="message-circle" class="w-5 h-5 fill-current"></i>
+          <span>Kirim Konfirmasi ke WhatsApp 💬</span>
+        </button>
+
+        <!-- Save / Download Ticket Button -->
+        <button onclick="downloadTicketImage()"
+          class="w-full sm:w-auto py-3.5 px-5 rounded-2xl bg-white hover:bg-parchment-200 text-slate-800 font-sans font-semibold text-sm border border-slate-300 flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95"
+          title="Simpan gambar tiket ke galeri">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Simpan Tiket</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ambient.js?v=3"></script>
+  <script>
+    // ========================================================
+    // MUSIK "HAPPY HAPPY HAPPY" - Loop terus selama di halaman tiket
+    // ========================================================
+    const happyMusic = new Audio('Addons/Sound%20Effect/happy-happy-happy-song.mp3');
+    happyMusic.loop = true;      // Putar ulang otomatis saat durasi habis
+    happyMusic.volume = 0.8;
+    happyMusic.preload = 'auto';
+
+    // Jaminan looping terus jika loop boolean tidak otomatis terpicu di beberapa browser
+    happyMusic.addEventListener('ended', function () {
+      this.currentTime = 0;
+      this.play().catch(() => { });
+    }, false);
+
+    function showPlayButton(show) {
+      const btn = document.getElementById('btnPlayMusic');
+      if (!btn) return;
+      btn.classList.toggle('hidden', !show);
+      btn.classList.toggle('flex', show);
+    }
+
+    function startHappyMusic(fromUser) {
+      if (!AppState.soundEnabled) {
+        if (fromUser) { AppState.toggleSound(); } else { return; }
+      }
+      happyMusic.play()
+        .then(() => showPlayButton(false))
+        .catch(() => showPlayButton(true)); // Autoplay diblokir browser
+    }
+
+    // Jika autoplay diblokir, mulai musik pada interaksi pertama di mana saja
+    function playOnFirstInteraction() {
+      if (happyMusic.paused && AppState.soundEnabled) startHappyMusic(true);
+    }
+    document.addEventListener('pointerdown', playOnFirstInteraction, { once: true });
+    document.addEventListener('keydown', playOnFirstInteraction, { once: true });
+
+    // Jeda saat tab ditinggalkan, lanjut lagi saat kembali ke tiket
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        happyMusic.pause();
+      } else if (AppState.soundEnabled) {
+        startHappyMusic(false);
+      }
+    });
+
+    // Hentikan musik saat meninggalkan halaman tiket
+    window.addEventListener('pagehide', () => happyMusic.pause());
+
+    function toggleTicketSound() {
+      AppState.toggleSound();
+      if (AppState.soundEnabled) {
+        startHappyMusic(false);
+      } else {
+        happyMusic.pause();
+        showPlayButton(false);
+      }
+    }
+
+    // Selebrasi Confetti + musik otomatis saat halaman tiket dibuka
+    window.addEventListener('DOMContentLoaded', () => {
+      startHappyMusic(false);
+      fireConfettiBarrage();
+    });
+
+    function fireConfettiBarrage() {
+      if (!window.confetti) return;
+      const duration = 2.5 * 1000;
+      const animationEnd = Date.now() + duration;
+
+      const interval = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 45 * (timeLeft / duration);
+        // Tembakan kiri (60 deg)
+        confetti({
+          particleCount,
+          angle: 60,
+          spread: 65,
+          origin: { x: 0, y: 0.7 },
+          colors: ['#e11d48', '#f43f5e', '#fb7185', '#fde047', '#10b981']
+        });
+        // Tembakan kanan (120 deg)
+        confetti({
+          particleCount,
+          angle: 120,
+          spread: 65,
+          origin: { x: 1, y: 0.7 },
+          colors: ['#e11d48', '#f43f5e', '#fb7185', '#fde047', '#10b981']
+        });
+      }, 250);
+    }
+
+    function sendWhatsAppConfirmation() {
+      SoundEffects.play('click');
+      const message = `Halo! 🌹 Proposal kencannya udah aku baca dan aku ACC resmi nih! ✨\n\nTiket VIP atas nama "${AppState.recipientName}" sudah terbit. Rundown-nya udah oke dan seru banget, jemput tepat waktu ya! See you on our date!`;
+      const encoded = encodeURIComponent(message);
+      const phone = '6281326661373'; // nomor tujuan konfirmasi
+      const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
+      window.open(url, '_blank');
+    }
+
+    function downloadTicketImage() {
+      SoundEffects.play('click');
+      const captureArea = document.getElementById('captureArea');
+      if (window.html2canvas && captureArea) {
+        html2canvas(captureArea, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#fdfbf7'
+        }).then(canvas => {
+          const link = document.createElement('a');
+          link.download = `Tiket-Kencan-${AppState.recipientName.replace(/\s+/g, '-')}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        }).catch(err => {
+          console.error("Gagal mendownload tiket:", err);
+          window.print();
+        });
+      } else {
+        window.print();
+      }
+    }
+  </script>
+</body>
+
+</html>

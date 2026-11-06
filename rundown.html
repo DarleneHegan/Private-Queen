@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Naizka</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E<text y=%2226%22 font-size=%2228%22>💌</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sacramento&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50: '#fffdfa', 100: '#fdfbf7', 200: '#f9f3ea', 300: '#f2e5d3', 400: '#e5ceb3' },
+            crimson: { 50: '#fff1f2', 100: '#ffe4e6', 500: '#f43f5e', 600: '#e11d48', 700: '#be123c', 800: '#9f1239', 900: '#881337' },
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Newsreader"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            handwriting: ['"Caveat"', 'cursive'],
+            script: ['"Sacramento"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Canvas Confetti & Custom Stylesheet -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body data-step="3" class="intro-scene antialiased min-h-screen selection:bg-crimson-100 selection:text-crimson-800 relative flex flex-col justify-between">
+
+  <!-- Suasana latar -->
+  <div id="ambient" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Main Content: HALAMAN 3 RUNDOWN & DECISION -->
+  <main class="relative z-10 max-w-3xl mx-auto px-4 py-8 md:py-12 flex-grow">
+    
+    <!-- Section Header -->
+    <div class="text-center mb-8">
+      <!-- Mahkota emas di atas judul -->
+      <svg viewBox="0 0 64 50" class="w-12 h-10 mx-auto mb-2 animate-float drop-shadow-[0_0_10px_rgba(252,211,77,0.55)]" aria-hidden="true">
+        <path d="M6 40 L2 12 L18 25 L32 6 L46 25 L62 12 L58 40 Z" fill="#f5c542" stroke="#a16207" stroke-width="2" stroke-linejoin="round"/>
+        <rect x="6" y="40" width="52" height="7" rx="2" fill="#e0a82e" stroke="#a16207" stroke-width="2"/>
+        <circle cx="2" cy="12" r="3.5" fill="#fb7185" stroke="#a16207" stroke-width="1.2"/>
+        <circle cx="32" cy="6" r="4.2" fill="#e11d48" stroke="#a16207" stroke-width="1.2"/>
+        <circle cx="62" cy="12" r="3.5" fill="#fb7185" stroke="#a16207" stroke-width="1.2"/>
+        <circle cx="32" cy="43.5" r="2" fill="#fff7d6"/>
+        <circle cx="18" cy="43.5" r="1.5" fill="#fff7d6"/>
+        <circle cx="46" cy="43.5" r="1.5" fill="#fff7d6"/>
+      </svg>
+      <!-- <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300 mb-2">
+        <i data-lucide="plane-takeoff" class="w-3.5 h-3.5 text-amber-700"></i>
+        <span>EXCLUSIVE BOARDING PASS ITINERARY</span>
+      </div> -->
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-rose-50">
+        Rundown Date Sang Pangeran dan Sang Ratu
+      </h2>
+      <!-- Pemisah: pangeran & ratu -->
+      <div class="flex items-center justify-center gap-3 mt-3 text-2xl select-none" aria-hidden="true">
+        <span class="royal-line-r"></span>
+        <span>🤴</span>
+        <!-- <span class="text-crimson-400 text-lg animate-pulseSlow">♥</span> -->
+        <span>👸</span>
+        <span class="royal-line-l"></span>
+      </div>
+    </div>
+
+    <!-- Boarding Pass Styled Card -->
+    <div class="paper-card royal-pattern royal-frame rounded-2xl relative overflow-hidden border border-parchment-300 p-6 sm:p-8 mb-8">
+
+      <!-- Hiasan sudut emas -->
+      <span class="royal-corner tl"></span>
+      <span class="royal-corner tr"></span>
+      <span class="royal-corner bl"></span>
+      <span class="royal-corner br"></span>
+      
+      <!-- Boarding pass punched notch cutouts -->
+      <div class="boarding-notch-left"></div>
+      <div class="boarding-notch-right"></div>
+
+      <!-- Ticket Header Bar -->
+      <div class="flex flex-wrap items-center justify-between pb-4 mb-6 border-b border-dashed border-slate-200 text-xs font-mono">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-slate-900 text-white font-bold">VIP-01</span>
+          <span class="text-slate-500">KODE KENCAN: DATE71126</span>
+        </div>
+      </div>
+
+      <!-- Sequential Timeline Items -->
+      <div class="space-y-4" id="timelineList">
+
+        <!-- Step 1 -->
+        <div class="timeline-step flex items-start gap-4 p-3.5 rounded-xl bg-parchment-50 border border-parchment-200/80 transition-all duration-500 opacity-0 translate-y-4">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-crimson-100 text-crimson-700 flex items-center justify-center text-2xl shadow-sm">
+            🚗👑
+          </div>
+          <div class="flex-grow">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-bold text-crimson-700 bg-crimson-50 px-2 py-0.5 rounded">14.00</span>
+              <span class="text-xs text-slate-400 font-mono">STEP 01</span>
+            </div>
+            <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900 mt-1 flex items-center gap-1.5">
+              <i data-lucide="car" class="w-4 h-4 flex-shrink-0 text-crimson-700"></i>
+              <span>Jemput Sang Ratu di depan rumah</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600">Sang Pangeran bakal jemput ke rumah Sang Ratu</p>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="timeline-step flex items-start gap-4 p-3.5 rounded-xl bg-parchment-50 border border-parchment-200/80 transition-all duration-500 opacity-0 translate-y-4">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl shadow-sm">
+            🚆📱
+          </div>
+          <div class="flex-grow">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">14.10</span>
+              <span class="text-xs text-slate-400 font-mono">STEP 02</span>
+            </div>
+            <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900 mt-1 flex items-center gap-1.5">
+              <i data-lucide="train-front" class="w-4 h-4 flex-shrink-0 text-amber-700"></i>
+              <span>OTW pake grab ke KRL Terdekat</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600">Kalau pake KRL, bakal lebih seru gak sih perjalannya..</p>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="timeline-step flex items-start gap-4 p-3.5 rounded-xl bg-parchment-50 border border-parchment-200/80 transition-all duration-500 opacity-0 translate-y-4">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-2xl shadow-sm">
+            ☕🍰
+          </div>
+          <div class="flex-grow">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded">15.00</span>
+              <span class="text-xs text-slate-400 font-mono">STEP 03</span>
+            </div>
+            <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900 mt-1 flex items-center gap-1.5">
+              <i data-lucide="coffee" class="w-4 h-4 flex-shrink-0 text-rose-700"></i>
+              <span>Midori Coffe Menteng</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600">Nah disini Sang Ratu bakal makan enak sambil ngobrol seru, Sang Pangeran mau ngobrol lebih lanjut ama Sang Ratu</p>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="timeline-step flex items-start gap-4 p-3.5 rounded-xl bg-parchment-50 border border-parchment-200/80 transition-all duration-500 opacity-0 translate-y-4">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl shadow-sm">
+            🚇🍢
+          </div>
+          <div class="flex-grow">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">17.00</span>
+              <span class="text-xs text-slate-400 font-mono">STEP 04</span>
+            </div>
+            <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900 mt-1 flex items-center gap-1.5">
+              <i data-lucide="map" class="w-4 h-4 flex-shrink-0 text-indigo-700"></i>
+              <span>Keliling Jakarta Pake Transport umum</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600">Nah setelah dari Cafe, kita jalan jalan yok, keliling jakarta sambil cari jajanan yang paling enak</p>
+          </div>
+        </div>
+        <!-- Step 5 -->
+        <div class="timeline-step flex items-start gap-4 p-3.5 rounded-xl bg-parchment-50 border border-parchment-200/80 transition-all duration-500 opacity-0 translate-y-4">
+          <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shadow-sm">
+            🏡🌙
+          </div>
+          <div class="flex-grow">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">20.00</span>
+              <span class="text-xs text-slate-400 font-mono">STEP 05</span>
+            </div>
+            <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900 mt-1 flex items-center gap-1.5">
+              <i data-lucide="home" class="w-4 h-4 flex-shrink-0 text-emerald-700"></i>
+              <span>Anterin Sang Ratu ke rumah</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600">Nah saatnya pulang yak, biar Sang Ratu aman, tenang Sang Pangeran akan kawal sepanjang perjalanan memastikan Sang Ratu aman</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Verified Location Box
+      <div class="timeline-step mt-5 p-4 rounded-xl bg-gradient-to-r from-amber-50 to-rose-50 border border-amber-200/80 flex items-center gap-3 transition-all duration-500 opacity-0 translate-y-4">
+        <div class="w-10 h-10 rounded-full bg-white text-crimson-600 flex items-center justify-center shadow-sm flex-shrink-0">
+          <i data-lucide="map-pin" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="text-xs font-mono font-bold text-amber-900 uppercase">VERIFIED LOCATION PROTOCOL 📍</div>
+          <div class="text-xs sm:text-sm text-slate-700 font-medium">Secret Romantic & Cozy Spot (100% Curated with Love & High Taste)</div>
+        </div>
+      </div> -->
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- THE FINAL DECISION CARD & EVASIVE BUTTON   -->
+    <!-- ========================================== -->
+    <div id="decisionCard" class="paper-card royal-pattern royal-frame relative rounded-2xl p-6 sm:p-8 text-center border-2 border-crimson-200 bg-white/95 shadow-xl transition-all duration-700 opacity-0 translate-y-6">
+      
+      <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-crimson-100 text-crimson-700 flex items-center justify-center animate-bounce">
+        <span class="text-2xl">🌹</span>
+      </div>
+
+      <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
+        Nah, apakah Sang Ratu tertarik?
+      </h3>
+      <p class="font-sans text-sm text-slate-600 mb-6 max-w-md mx-auto">
+        Proposal sudah diajukan, izin ortu sudah di-ACC, sekarang tinggal keputusan dari Sang Ratu nih! 👑
+      </p>
+
+      <!-- CTA Action Buttons Container with Cat Flower -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-3 px-2">
+        
+        <!-- Buttons Container (YES & Gak Mau) -->
+        <div class="relative min-h-[70px] flex flex-col sm:flex-row items-center justify-center gap-3.5" id="decisionButtonContainer">
+          
+          <!-- The YES Button (Glory & Confetti -> Navigate to tiket.html) -->
+          <button 
+            id="btnYes"
+            onclick="handleYesDecision()"
+            class="w-full sm:w-auto px-7 sm:px-9 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-sans font-bold text-base sm:text-lg shadow-lg hover:shadow-emerald-500/30 transition-all duration-200 flex items-center justify-center gap-2 transform active:scale-95 animate-pulseSlow">
+            <!-- <i data-lucide="heart" class="w-5 h-5 fill-current text-white"></i> -->
+            <span>YES, MAU BANGET! ✨</span>
+          </button>
+
+          <!-- The Evasive "Gak Mau" Button (Runs away!) -->
+          <button 
+            id="btnNo"
+            class="px-6 py-3.5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-sans font-semibold text-sm sm:text-base border border-slate-300 shadow-sm transition-transform duration-150 select-none whitespace-nowrap cursor-pointer">
+            Gak dulu, makasih
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ambient.js?v=3"></script>
+  <script src="js/evasive.js?v=2"></script>
+  <script>
+    // Inisialisasi: izinkan scroll bebas di halaman rundown & siapkan sound cartoonslip
+    window.addEventListener('DOMContentLoaded', () => {
+      unlockScroll();
+      document.documentElement.style.overflow = 'auto';
+      document.body.style.overflow = 'auto';
+
+      // Preload sound effect cartoonslip agar responsif instan
+      if (window.SoundEffects && typeof SoundEffects.initSlipPool === 'function') {
+        SoundEffects.initSlipPool();
+      }
+
+      // Siapkan evasive button dari awal
+      EvasiveButton.init('btnNo');
+
+      animateTimelineSteps();
+    });
+
+    function animateTimelineSteps() {
+      const steps = document.querySelectorAll('.timeline-step');
+      steps.forEach((step, index) => {
+        setTimeout(() => {
+          step.classList.remove('opacity-0', 'translate-y-4');
+          step.classList.add('opacity-100', 'translate-y-0');
+        }, index * 200);
+      });
+
+      // Tampilkan kartu keputusan
+      const totalStepsDelay = steps.length * 200 + 100;
+      setTimeout(() => {
+        const decisionCard = document.getElementById('decisionCard');
+        if (decisionCard) {
+          decisionCard.classList.remove('opacity-0', 'translate-y-6');
+          decisionCard.classList.add('opacity-100', 'translate-y-0');
+        }
+      }, totalStepsDelay);
+    }
+
+    function handleYesDecision() {
+      SoundEffects.play('cheer');
+
+      // Tembakan confetti sejenak sebelum pindah ke tiket.html
+      if (window.confetti) {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#e11d48', '#f43f5e', '#fb7185', '#fde047', '#10b981']
+        });
+      }
+
+      setTimeout(() => {
+        navigateTo('tiket.html');
+      }, 700);
+    }
+  </script>
+</body>
+</html>
+
