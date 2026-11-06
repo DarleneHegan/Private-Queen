@@ -41,7 +41,7 @@ const AppState = {
     if (heroDisplay) heroDisplay.textContent = this.recipientName;
 
     const ticketName = document.getElementById('ticketPassengerName');
-    if (ticketName) ticketName.textContent = this.recipientName;
+    if (ticketName) ticketName.textContent = `${this.recipientName} (Sang Ratu)`;
   },
 
   // Toggle suara

@@ -187,7 +187,7 @@
         <button onclick="sendWhatsAppConfirmation()"
           class="w-full flex-1 py-3.5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-sans font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg hover:shadow-emerald-600/30 transition-all active:scale-95">
           <i data-lucide="message-circle" class="w-5 h-5 fill-current"></i>
-          <span>Kirim Konfirmasi ke WhatsApp 💬</span>
+          <span>Kirim Konfirmasi ke WhatsApp</span>
         </button>
 
         <!-- Save / Download Ticket Button -->
@@ -205,7 +205,7 @@
 
   <!-- Scripts -->
   <script src="js/audio.js"></script>
-  <script src="js/state.js"></script>
+  <script src="js/state.js?v=2"></script>
   <script src="js/ambient.js?v=3"></script>
   <script>
     // ========================================================
@@ -306,7 +306,7 @@
 
     function sendWhatsAppConfirmation() {
       SoundEffects.play('click');
-      const message = `Halo! 🌹 Proposal kencannya udah aku baca dan aku ACC resmi nih! ✨\n\nTiket VIP atas nama "${AppState.recipientName}" sudah terbit. Rundown-nya udah oke dan seru banget, jemput tepat waktu ya! See you on our date!`;
+      const message = `Halo! 🌹 Proposal kencannya udah aku baca dan aku ACC resmi nih! ✨\n\nTiket VIP atas nama Naizka (Sang Ratu) sudah terbit. Rundown-nya udah oke dan seru banget, jemput tepat waktu ya! See you on our date, Pangeran!`;
       const encoded = encodeURIComponent(message);
       const phone = '6281326661373'; // nomor tujuan konfirmasi
       const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
