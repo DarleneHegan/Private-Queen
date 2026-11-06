@@ -239,13 +239,18 @@
           <!-- The Evasive "Gak Mau" Button (Runs away!) -->
           <button 
             id="btnNo"
-            class="px-6 py-3.5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-sans font-semibold text-sm sm:text-base border border-slate-300 shadow-sm transition-transform duration-150 select-none whitespace-nowrap cursor-pointer">
+            class="px-6 py-3.5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-sans font-semibold text-sm sm:text-base border border-slate-300 shadow-sm select-none whitespace-nowrap cursor-pointer touch-none">
             Gak dulu, makasih
           </button>
 
         </div>
 
       </div>
+
+      <!-- Hint text yang muncul saat tombol mulai kabur/bergerak -->
+      <p id="decisionHint" class="hidden text-xs sm:text-sm font-handwriting text-crimson-600 font-bold mt-2 animate-pulseSlow select-none">
+        Muehehe tombolnya kabur terus tuh, jadiin aja yokk....
+      </p>
 
     </div>
 
@@ -255,7 +260,7 @@
   <script src="js/audio.js"></script>
   <script src="js/state.js"></script>
   <script src="js/ambient.js?v=3"></script>
-  <script src="js/evasive.js?v=2"></script>
+  <script src="js/evasive.js?v=3"></script>
   <script>
     // Inisialisasi: izinkan scroll bebas di halaman rundown & siapkan sound cartoonslip
     window.addEventListener('DOMContentLoaded', () => {
