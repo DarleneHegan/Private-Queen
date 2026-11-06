@@ -155,13 +155,16 @@ const EvasiveButton = {
     if (this._lastDodgeTime && now - this._lastDodgeTime < 45) return;
     this._lastDodgeTime = now;
 
-    if (window.SoundEffects) {
-      if (typeof SoundEffects.playSlip === 'function') {
-        SoundEffects.playSlip();
+    // Putar sound effect lucu cartoonslip.mp3
+    try {
+      if (window.SoundEffects && typeof SoundEffects.playSlip === 'function') {
+        SoundEffects.playSlip(1.0);
       } else {
-        SoundEffects.playFile('slip');
+        const slip = new Audio('Addons/Sound%20Effect/cartoonslip.mp3');
+        slip.volume = 1.0;
+        slip.play().catch(() => {});
       }
-    }
+    } catch (err) {}
     this.dodgeCount++;
 
     // Label tetap "Gak dulu, makasih"
@@ -226,11 +229,13 @@ const EvasiveButton = {
     this.btnElement.style.left = Math.round(best.x) + 'px';
     this.btnElement.style.top = Math.round(best.y) + 'px';
 
-    // Munculkan tulisan kecil tepat saat tombol sudah mulai bergerak/kabur (tidak muncul pas di awal)
-    const hint = document.getElementById('decisionHint');
-    if (hint) {
-      hint.textContent = "Muehehe tombolnya kabur terus tuh, jadiin aja yokk....";
-      hint.classList.remove('hidden');
+    // Munculkan tulisan notif setelah tombol bergeser/kabur minimal 3 kali
+    if (this.dodgeCount >= 3) {
+      const hint = document.getElementById('decisionHint');
+      if (hint) {
+        hint.textContent = "Muehehe tombolnya kabur terus tuh, jadiin aja yokk....";
+        hint.classList.remove('hidden');
+      }
     }
   },
 

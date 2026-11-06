@@ -18,32 +18,48 @@ const SoundEffects = {
   initSlipPool() {
     if (this.slipAudioPool.length > 0) return;
     const soundPath = 'Addons/Sound%20Effect/cartoonslip.mp3';
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       const a = new Audio(soundPath);
       a.preload = 'auto';
       this.slipAudioPool.push(a);
     }
   },
 
-  // Putar sound effect cartoonslip.mp3 saat tombol 'Gak Mau' menghindar
+  // Putar sound effect cartoonslip.mp3 saat tombol 'Gak dulu, makasih' menghindar
   playSlip(volume = 1.0) {
     if (typeof AppState !== 'undefined' && !AppState.soundEnabled) return;
     
     const now = Date.now();
-    if (now - this.lastSlipTime < 60) return; // throttle micro-events
+    if (now - this.lastSlipTime < 50) return; // throttle micro-events
     this.lastSlipTime = now;
 
     this.initSlipPool();
 
     try {
-      const audio = this.slipAudioPool[this.slipIdx % this.slipAudioPool.length];
-      this.slipIdx++;
-      audio.currentTime = 0;
-      audio.volume = volume;
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(err => {
-          // Fallback ke Web Audio API synth jika autoplay audio file dibatasi
+      let audio = null;
+      if (this.slipAudioPool && this.slipAudioPool.length > 0) {
+        audio = this.slipAudioPool[this.slipIdx % this.slipAudioPool.length];
+        this.slipIdx++;
+      }
+
+      if (audio) {
+        audio.currentTime = 0;
+        audio.volume = volume;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            // Coba putar via instance baru jika pool belum siap
+            const freshAudio = new Audio('Addons/Sound%20Effect/cartoonslip.mp3');
+            freshAudio.volume = volume;
+            freshAudio.play().catch(() => {
+              this.play('whoosh');
+            });
+          });
+        }
+      } else {
+        const freshAudio = new Audio('Addons/Sound%20Effect/cartoonslip.mp3');
+        freshAudio.volume = volume;
+        freshAudio.play().catch(() => {
           this.play('whoosh');
         });
       }
