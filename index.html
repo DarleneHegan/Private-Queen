@@ -111,16 +111,17 @@
     /* Petunjuk klik yang samar */
     .tap-hint {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: 0.35em;
       text-transform: uppercase;
-      color: rgba(255, 228, 230, 0.4);
+      color: #ffe4e6;
+      text-shadow: 0 0 10px rgba(251, 113, 133, 0.7);
       animation: hintBreath 3.4s ease-in-out infinite;
       transition: opacity 0.5s ease;
     }
     @keyframes hintBreath {
-      0%, 100% { opacity: 0.25; }
-      50%      { opacity: 0.65; }
+      0%, 100% { opacity: 0.6; }
+      50%      { opacity: 1; }
     }
 
     .fade-away { opacity: 0 !important; pointer-events: none; }
